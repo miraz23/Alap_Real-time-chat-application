@@ -15,7 +15,7 @@ import clsx from "clsx";
  */
 
 export function Anchor ({children, className, ...props}) {
-  const addStyle = "bg-gradient-to-r from-fuchsia-500 to-indigo-900 bg-clip-text text-transparent transition-all duration-500 ease-in-out hover:opacity-90 cursor-pointer"
+  const addStyle = "text-fuchsia-500 transition-all duration-500 ease-in-out hover:text-purple-900 cursor-pointer"
   const addClass = twMerge( clsx(addStyle), className )
 
   return (
