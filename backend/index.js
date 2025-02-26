@@ -53,6 +53,26 @@ app.post('/sign-in', async (req, res) => {
     res.status(200).json({ message: 'User logged in successfully!', token });
 });
 
+app.get('/profile', verifyToken, (req, res) => {
+    res.status(200).json({ message: `Welcome ${req.username}` });
+});
+
+function verifyToken(req, res, next) {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    try {
+        const { username } = jwt.verify(token, SECRET_KEY);
+        req.username = username;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+}
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
