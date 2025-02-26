@@ -1,12 +1,36 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY || 'secret';
+const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
 
-app.get('/', (req, res)=>{
-    res.send('Started Backend');
-})
+app.use(bodyParser.json());
+const users = [];
 
-app.listen(port, ()=>{
-    console.log(`Server is running on port ${port}`);
-})
+app.post('/sign-up', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    if(users.find(user => user.username === username)) {
+        return res.status(400).json({ message: 'User already exists!' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    users.push({ username, password: hashedPassword });
+
+    res.status(200).json({ message: 'User signed up successfully!' });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
