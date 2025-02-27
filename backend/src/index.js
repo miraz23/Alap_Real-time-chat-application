@@ -1,6 +1,6 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
+import express from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 import authRouter from "./auth/auth.routes.js";
 
 dotenv.config();
